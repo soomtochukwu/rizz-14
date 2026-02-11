@@ -118,7 +118,26 @@ export default function CrushPage() {
                             textShadow: "3px 3px 0 #000",
                         }}
                     >
-                        YOU&apos;VE GOT A CRUSH! 💘
+                        {request?.crush_x_handle ? (
+                            <>
+                                <span
+                                    className="block mb-2 text-3xl sm:text-5xl text-stroke"
+                                    style={{
+                                        color: "var(--electric-yellow)",
+                                        textShadow: "3px 3px 0 #000",
+                                        fontFamily: "Bangers, cursive",
+                                        transform: "rotate(-2deg)",
+                                        display: "inline-block"
+                                    }}
+                                >
+                                    @{request.crush_x_handle}
+                                </span>
+                                <br />
+                                YOU&apos;VE GOT A CRUSH! 💘
+                            </>
+                        ) : (
+                            "YOU'VE GOT A CRUSH! 💘"
+                        )}
                     </h1>
                 </motion.div>
 

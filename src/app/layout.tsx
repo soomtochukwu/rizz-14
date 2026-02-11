@@ -10,17 +10,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Crush Confessor 💘 | Ask Your Crush Out",
+  title: "Rizz-14 💘 | The Valentine's Digital Wingman",
   description:
     "The cheekiest way to shoot your shot. Generate a link, send it to your crush, and find out if they feel the same way!",
   openGraph: {
-    title: "Crush Confessor 💘",
+    title: "Rizz-14 💘",
     description: "Someone has a crush on you... Will you say YES?",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Crush Confessor 💘",
+    title: "Rizz-14 💘",
     description: "Someone has a crush on you... Will you say YES?",
   },
 };
@@ -46,7 +46,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased min-h-screen flex flex-col overflow-x-hidden`}>
         <Providers>
-          <main className="flex-grow flex items-center justify-center w-full relative z-10">
+          <main className="grow flex items-center justify-center w-full relative z-10">
             {children}
           </main>
           <Footer />

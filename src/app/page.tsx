@@ -79,8 +79,9 @@ export default function HomePage() {
   };
 
   const shareOnX = () => {
+    const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
     const text = encodeURIComponent(
-      `${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
+      `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
   };
@@ -118,7 +119,7 @@ export default function HomePage() {
               textShadow: "3px 3px 0 #000",
             }}
           >
-            CRUSH CONFESSOR
+            RIZZ-14
           </h1>
           <p
             className="text-lg sm:text-xl"
