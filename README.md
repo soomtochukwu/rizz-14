@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💘 Rizz-14: The Valentine's Digital Wingman for Nerds
 
-## Getting Started
+**Finally, a way to confess your feelings without actually talking to anyone.**
 
-First, run the development server:
+Rizz-14 is a **Neo-Pop, AI-powered "Digital Wingman"** built for developers, degens, and chronically online nerds. It scrapes your crush's X (Twitter) profile to generate scientifically calibrated, hyper-specific pickup lines ("Rizz") that slide into their DMs with surgical precision.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Neo-Pop UI](./public/screenshot-demo.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧠 How It Works (The "Stealth Mode" Algorithm)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Stop sending generic "Happy Valentine's Day" texts. Rizz-14 uses a sophisticated 3-step process:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Reconnaissance (Exa.ai)**: We scan their last **365 days of tweets** to find their deep-seated obsessions (e.g., hating Java, loving Formula 1, or buying high at the top).
+2.  **Psychological Profiling (Gemini 2.5)**: Our "Telepathic Resonance" engine identifies their "main character energy" without being creepy.
+3.  **The Strike**: It generates a 10/10 pickup line that references their niche interest *stealthily*.
+    *   *Bad:* "I saw you like Rust."
+    *   *Rizz-14:* "i can't promise memory safety but i can promise a date on feb 14. be my valentine? 🦀🔥"
 
-## Learn More
+## 🚀 Key Features
 
-To learn more about Next.js, take a look at the following resources:
+*   **Neo-Pop Aesthetic**: Halftone dots, brutalist borders, and comic book vibes.
+*   **Telepathic Rizz**: AI that knows they hate slow walkers before you even meet them.
+*   **Runaway "NO" Button**: The "No" button physically runs away from their cursor. Rejection is literally impossible.* (*Terms apply*)
+*   **Crypto Paywall (Optional)**: If they try to reject you 5 times, they have to pay $2 USDT to escape.
+*   **Social Proof**: Live counter of how many people have "confessed" today.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack (For the Nerds)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*   **Framework**: Next.js 16 (App Router)
+*   **Styling**: Tailwind CSS + Framer Motion (for the smooth button physics)
+*   **AI**: Google Gemini 2.5 Flash + Exa.ai (Twitter Scraping)
+*   **Database**: Supabase
+*   **Web3**: wagmi + viem (Polygon USDT integration)
 
-## Deploy on Vercel
+## 📦 Getting Started
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1.  **Clone the repo**
+    ```bash
+    git clone https://github.com/yourusername/rizz-14.git
+    cd rizz-14
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Set up environment variables**
+    Create a `.env.local` file:
+    ```env
+    NEXT_PUBLIC_SUPABASE_URL=...
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+    GEMINI_API_KEY=...
+    EXA_API_KEY=...
+    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=...
+    ```
+
+4.  **Run the wingman**
+    ```bash
+    npm run dev
+    ```
+
+## 🤝 Contributing
+
+Got better Rizz? Submit a PR. We need more "Telepathic" prompts for specific niches (e.g., Vim users, Gym rats, DeFi degens).
+
+## 📜 License
+
+MIT. Use this to find love, not to stalk. BE NORMAL.
