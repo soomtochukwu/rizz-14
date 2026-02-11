@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const logout = useCallback(async () => {
         await fetch("/api/auth/session", { method: "DELETE" });
         setUser(null);
+        window.location.reload();
     }, []);
 
     return (
