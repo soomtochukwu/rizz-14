@@ -18,8 +18,11 @@ export async function GET() {
   const state = generateState();
 
   // Determine redirect URI based on environment
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  // Remove trailing slash if present
+  if (baseUrl.endsWith("/")) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
   const redirectUri = `${baseUrl}/api/auth/twitter/callback`;
 
   // Build the authorization URL

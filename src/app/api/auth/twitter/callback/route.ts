@@ -6,8 +6,13 @@ import {
 import { supabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
-const getBaseUrl = () =>
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const getBaseUrl = () => {
+  let url = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  if (url.endsWith("/")) {
+    url = url.slice(0, -1);
+  }
+  return url;
+};
 
 /**
  * GET /api/auth/twitter/callback
@@ -51,18 +56,14 @@ export async function GET(request: NextRequest) {
     // Exchange code for tokens
     const redirectUri = `${baseUrl}/api/auth/twitter/callback`;
 
-    const tokens = await exchangeCodeForTokens(
-      code,
-      codeVerifier,
-      redirectUri
-    );
+    const tokens = await exchangeCodeForTokens(code, codeVerifier, redirectUri);
 
     // Fetch user profile
     const twitterUser = await getAuthenticatedUser(tokens.access_token);
 
     // Calculate token expiration
     const tokenExpiresAt = new Date(
-      Date.now() + tokens.expires_in * 1000
+      Date.now() + tokens.expires_in * 1000,
     ).toISOString();
 
     // Upsert user in database
@@ -78,7 +79,7 @@ export async function GET(request: NextRequest) {
           x_refresh_token: tokens.refresh_token,
           token_expires_at: tokenExpiresAt,
         },
-        { onConflict: "x_user_id" }
+        { onConflict: "x_user_id" },
       )
       .select("id")
       .single();
