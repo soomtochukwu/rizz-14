@@ -14,7 +14,9 @@ function getAI(): GoogleGenAI {
 
 // ─── Scrape crush's X personality via Exa.ai ──────────────────────
 // Returns invalid object if no tweets found, or { tweets: string, name?: string }
-async function scrapeCrushData(handle: string): Promise<{ tweets: string; name?: string } | null> {
+async function scrapeCrushData(
+  handle: string,
+): Promise<{ tweets: string; name?: string } | null> {
   const exaKey = process.env.EXA_API_KEY;
   if (!exaKey) return null;
 
@@ -28,19 +30,16 @@ async function scrapeCrushData(handle: string): Promise<{ tweets: string; name?:
     const startDate = oneYearAgo.toISOString();
 
     // Search for highly engaged/relevant tweets from this handle
-    const result = await exa.search(
-      `tweets from @${handle}`,
-      {
-        type: "auto",
-        category: "tweet",
-        useAutoprompt: true,
-        startPublishedDate: startDate,
-        numResults: 15,
-        contents: {
-          text: true,
-        },
-      }
-    );
+    const result = await exa.search(`tweets from @${handle}`, {
+      type: "auto",
+      category: "tweet",
+      useAutoprompt: true,
+      startPublishedDate: startDate,
+      numResults: 15,
+      contents: {
+        text: true,
+      },
+    });
 
     if (result.results && result.results.length > 0) {
       // 1. Get the name from the first result if available (Exa often returns author field)
@@ -67,20 +66,20 @@ async function scrapeCrushData(handle: string): Promise<{ tweets: string; name?:
 
 // ─── Generate crush message ──────────────────────────────────────
 export async function generateCrushMessage(
-  crushHandle: string
+  crushHandle: string,
 ): Promise<string> {
   try {
     const ai = getAI();
 
     // Step 1: Try to scrape data via Exa
     const data = await scrapeCrushData(crushHandle);
-    
+
     // Determine the name to use (Handle > Display Name because Exa can be flaky)
     const displayName = `@${crushHandle}`;
     const tweets = data?.tweets || "";
 
     let prompt = "";
-    
+
     if (tweets) {
       // 🚨 MODE: Telepathic Rizz (Stealth Mode)
       prompt = `
@@ -115,6 +114,7 @@ export async function generateCrushMessage(
 
       *** OUTPUT ***
       Generate ONLY the message text. No explanations.
+      LENGTH: Strictly under 306 characters.
       `;
     } else {
       // 🚨 FALLBACK MODE: We only have the handle.
@@ -130,7 +130,7 @@ export async function generateCrushMessage(
       RULES:
       - TONE: Cocky, funny, smooth.
       - FORMAT: First person ("I").
-      - LENGTH: Under 240 chars.
+      - LENGTH: Under 306 characters.
       - EMOJIS: MUST use 2-3 flirty/relevant emojis (e.g. 💘, 😏, 🔥, ✨).
       - CALL TO ACTION: Unique "Be my Val?" plea.
       - NO hashtags.
@@ -148,7 +148,7 @@ export async function generateCrushMessage(
     if (!text) {
       return getFallbackMessage(crushHandle);
     }
-    return text;
+    return text.slice(0, 306);
   } catch (error: any) {
     console.error("GenAI error:", error);
     if (error.status === 429) {
@@ -157,7 +157,7 @@ export async function generateCrushMessage(
     }
     // Log Exa errors if any
     if (error.message?.includes("Exa")) {
-        console.error("⚠️ Exa API Error:", error.message);
+      console.error("⚠️ Exa API Error:", error.message);
     }
     return getFallbackMessage(crushHandle);
   }
@@ -174,7 +174,7 @@ function getFallbackMessage(crushHandle: string): string {
 }
 
 export async function generateAcceptanceMessage(
-  crushHandle: string
+  crushHandle: string,
 ): Promise<string> {
   try {
     const ai = getAI();
