@@ -9,7 +9,7 @@ export function FloatingHearts() {
 
     useEffect(() => {
         const emojis = ["💘", "💕", "💗", "✨", "💖", "❤️‍🔥"];
-        const generated = Array.from({ length: 15 }, (_, i) => ({
+        const generated = Array.from({ length: 8 }, (_, i) => ({
             id: i,
             left: Math.random() * 100,
             size: 0.8 + Math.random() * 1.2,

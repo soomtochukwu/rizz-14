@@ -98,20 +98,20 @@ export default function CrushPage() {
     };
 
     return (
-        <main className="min-h-screen flex flex-col items-center justify-center p-4 relative">
+        <div className="flex flex-col items-center justify-center p-3 sm:p-4 relative w-full">
             <FloatingHearts />
             <CelebrationOverlay show={showCelebration} />
 
             <div className="w-full max-w-lg z-10">
                 {/* Header */}
                 <motion.div
-                    className="text-center mb-8"
+                    className="text-center mb-4 sm:mb-8"
                     variants={springIn}
                     initial="hidden"
                     animate="visible"
                 >
                     <h1
-                        className="text-4xl sm:text-6xl mb-2 text-stroke"
+                        className="text-3xl sm:text-6xl mb-1 sm:mb-2 text-stroke"
                         style={{
                             fontFamily: "Bangers, cursive",
                             color: "var(--hot-pink)",
@@ -121,7 +121,7 @@ export default function CrushPage() {
                         {request?.crush_x_handle ? (
                             <>
                                 <span
-                                    className="block mb-2 text-3xl sm:text-5xl text-stroke"
+                                    className="block mb-1 sm:mb-2 text-2xl sm:text-5xl text-stroke"
                                     style={{
                                         color: "var(--electric-yellow)",
                                         textShadow: "3px 3px 0 #000",
@@ -146,7 +146,7 @@ export default function CrushPage() {
                     {state === "loading" && (
                         <motion.div
                             key="loading"
-                            className="comic-panel p-8 text-center"
+                            className="comic-panel p-4 sm:p-8 text-center"
                             variants={springIn}
                             initial="hidden"
                             animate="visible"
@@ -287,7 +287,7 @@ export default function CrushPage() {
                                     onClick={shareAcceptanceOnX}
                                     className="w-full"
                                 >
-                                    🐦 BRAG ON X!
+                                    𝕏 BRAG ON X!
                                 </ComicButton>
 
                                 <ComicButton
@@ -369,6 +369,6 @@ export default function CrushPage() {
                 onPaymentComplete={handlePaymentComplete}
                 linkId={linkId}
             />
-        </main>
+        </div>
     );
 }

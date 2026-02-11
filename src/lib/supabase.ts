@@ -42,6 +42,19 @@ export const supabase = new Proxy({} as SupabaseClient, {
   },
 });
 
+export type User = {
+  id: string;
+  x_user_id: string;
+  x_handle: string;
+  x_name: string | null;
+  x_avatar_url: string | null;
+  x_access_token: string;
+  x_refresh_token: string;
+  token_expires_at: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type CrushRequest = {
   id: string;
   sender_whatsapp: string;
@@ -49,5 +62,6 @@ export type CrushRequest = {
   ai_message: string;
   status: "pending" | "accepted" | "rejected_paid";
   payment_tx_hash: string | null;
+  sender_user_id: string | null;
   created_at: string;
 };

@@ -27,7 +27,7 @@ export function ComicButton({
     const sizeClasses = {
         sm: "!px-4 !py-2 !text-sm",
         md: "",
-        lg: "!px-8 !py-4 !text-xl",
+        lg: "!px-5 !py-3 !text-base sm:!px-8 sm:!py-4 sm:!text-xl",
     };
 
     return (

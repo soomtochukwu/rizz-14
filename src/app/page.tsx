@@ -7,11 +7,13 @@ import { ComicInput } from "@/components/ui/ComicInput";
 import { ComicProgress } from "@/components/ui/ComicProgress";
 import { FloatingHearts } from "@/components/FloatingHearts";
 import { springIn, slideUp, staggerContainer } from "@/lib/animations";
+import { useAuth } from "@/components/AuthContext";
 
-type Step = "input" | "generating" | "share";
+type Step = "auth" | "input" | "generating" | "share";
 
 export default function HomePage() {
-  const [step, setStep] = useState<Step>("input");
+  const { user, isLoading, isAuthenticated, login, logout } = useAuth();
+  const [step, setStep] = useState<Step>("auth");
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [crushHandle, setCrushHandle] = useState("");
   const [whatsApp, setWhatsApp] = useState("");
@@ -19,8 +21,15 @@ export default function HomePage() {
   const [linkId, setLinkId] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
+  const [autoPosted, setAutoPosted] = useState(false);
+  const [tweetId, setTweetId] = useState<string | null>(null);
 
-  const stepIndex = step === "input" ? 0 : step === "generating" ? 1 : 2;
+  // Automatically move to input step when authenticated
+  if (isAuthenticated && step === "auth") {
+    setStep("input");
+  }
+
+  const stepIndex = step === "auth" ? 0 : step === "input" ? 0 : step === "generating" ? 1 : 2;
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -57,6 +66,8 @@ export default function HomePage() {
       const data = await res.json();
       setAiMessage(data.aiMessage);
       setLinkId(data.linkId);
+      setAutoPosted(!!data.autoPosted);
+      setTweetId(data.tweetId || null);
       setStep("share");
     } catch (err: any) {
       setErrors({ form: err.message || "Something went wrong. Try again!" });
@@ -78,12 +89,10 @@ export default function HomePage() {
     return `/${linkId}`;
   };
 
-  const shareOnX = () => {
-    const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
-    const text = encodeURIComponent(
-      `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
-    );
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+  const viewTweet = () => {
+    if (tweetId) {
+      window.open(`https://twitter.com/i/web/status/${tweetId}`, "_blank");
+    }
   };
 
   const shareOnWhatsApp = () => {
@@ -100,19 +109,19 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 relative">
+    <div className="flex flex-col items-center justify-center p-3 sm:p-4 relative w-full">
       <FloatingHearts />
 
       <div className="w-full max-w-lg z-10">
         {/* Header */}
         <motion.div
-          className="text-center mb-8"
+          className="text-center mb-4 sm:mb-8"
           variants={springIn}
           initial="hidden"
           animate="visible"
         >
           <h1
-            className="text-5xl sm:text-7xl mb-2 text-stroke"
+            className="text-4xl sm:text-7xl mb-1 sm:mb-2 text-stroke"
             style={{
               fontFamily: "Bangers, cursive",
               color: "var(--hot-pink)",
@@ -122,7 +131,7 @@ export default function HomePage() {
             RIZZ-14
           </h1>
           <p
-            className="text-lg sm:text-xl"
+            className="text-base sm:text-xl"
             style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
           >
             Your digital wingman 💘 Shoot your shot!
@@ -131,7 +140,7 @@ export default function HomePage() {
 
         {/* Progress Bar */}
         <motion.div
-          className="mb-6"
+          className="mb-3 sm:mb-6"
           variants={slideUp}
           initial="hidden"
           animate="visible"
@@ -145,71 +154,154 @@ export default function HomePage() {
 
         {/* Main Panel */}
         <AnimatePresence mode="wait">
-          {/* Step 1: Input */}
-          {step === "input" && (
+          {/* Step 0: Auth */}
+          {step === "auth" && !isLoading && (
             <motion.div
-              key="input"
-              className="comic-panel p-6 sm:p-8"
+              key="auth"
+              className="comic-panel p-4 sm:p-8 text-center"
               variants={springIn}
               initial="hidden"
               animate="visible"
               exit="hidden"
             >
-              <motion.div variants={staggerContainer} initial="hidden" animate="visible">
-                <motion.div variants={slideUp} className="mb-6">
-                  <h2
-                    className="text-2xl mb-1"
-                    style={{ fontFamily: "Bangers, cursive" }}
-                  >
-                    👀 WHO&apos;S THE LUCKY ONE?
-                  </h2>
-                  <p
-                    className="text-sm text-gray-600"
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    We&apos;ll craft the perfect message for you
-                  </p>
-                </motion.div>
-
-                <motion.div variants={slideUp} className="mb-4">
-                  <ComicInput
-                    label="Their X (Twitter) Username"
-                    icon="🐦"
-                    placeholder="@crush_handle"
-                    value={crushHandle}
-                    onChange={(e) => setCrushHandle(e.target.value)}
-                    error={errors.crushHandle}
-                  />
-                </motion.div>
-
-                <motion.div variants={slideUp} className="mb-6">
-                  <ComicInput
-                    label="Your WhatsApp Number"
-                    icon="📱"
-                    placeholder="+234 XXX XXX XXXX"
-                    value={whatsApp}
-                    onChange={(e) => setWhatsApp(e.target.value)}
-                    error={errors.whatsApp}
-                  />
-                </motion.div>
-
-                {errors.form && (
-                  <p className="text-red-600 text-sm mb-4 font-bold text-center">
-                    ⚠️ {errors.form}
-                  </p>
-                )}
-
-                <motion.div variants={slideUp}>
-                  <ComicButton
-                    variant="pink"
-                    onClick={handleSubmit}
-                    className="w-full"
-                    size="lg"
-                  >
-                    💘 SHOOT YOUR SHOT!
-                  </ComicButton>
-                </motion.div>
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="mb-4 inline-block"
+              >
+                <svg viewBox="0 0 24 24" className="w-14 h-14 sm:w-16 sm:h-16" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
               </motion.div>
+              <h2
+                className="text-xl sm:text-2xl mb-2"
+                style={{ fontFamily: "Bangers, cursive" }}
+              >
+                SIGN IN TO SHOOT YOUR SHOT
+              </h2>
+              {/* <p
+                className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6"
+                style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
+              >
+                We&apos;ll auto-post your rizz to X and tag your crush 🎯
+              </p> */}
+              <ComicButton
+                variant="dark"
+                onClick={login}
+                className="w-full"
+                size="lg"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5 inline-block mr-1 fill-current" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg> SIGN IN WITH X
+              </ComicButton>
+              {/* <p className="mt-3 text-[10px] text-gray-400" style={{ fontFamily: "Inter, sans-serif" }}>
+                We&apos;ll ask permission to post &amp; like tweets on your behalf
+              </p> */}
+            </motion.div>
+          )}
+
+          {/* Step 1: Input */}
+          {step === "input" && (
+            <motion.div
+              key="input"
+              className="comic-panel p-4 sm:p-8"
+              variants={springIn}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              {/* Signed-in user badge */}
+              {user && (
+                <div className="flex items-center gap-2 mb-3 sm:mb-4 p-2 bg-green-50 border-2 border-black rounded-lg">
+                  {user.x_avatar_url && (
+                    <img
+                      src={user.x_avatar_url}
+                      alt={user.x_handle}
+                      className="w-8 h-8 rounded-full border-2 border-black"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold truncate" style={{ fontFamily: "Inter, sans-serif" }}>
+                      @{user.x_handle}
+                    </p>
+                    <p className="text-[10px] text-green-600">✓ Signed in</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="text-[10px] text-gray-400 hover:text-gray-600 underline"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
+              <form
+                onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
+                autoComplete="on"
+                noValidate
+              >
+                <motion.div variants={staggerContainer} initial="hidden" animate="visible">
+                  <motion.div variants={slideUp} className="mb-3 sm:mb-6">
+                    <h2
+                      className="text-xl sm:text-2xl mb-1"
+                      style={{ fontFamily: "Bangers, cursive" }}
+                    >
+                      👀 WHO&apos;S THE LUCKY ONE?
+                    </h2>
+                    <p
+                      className="text-xs sm:text-sm text-gray-600"
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    >
+                      We&apos;ll craft the perfect message for you
+                    </p>
+                  </motion.div>
+
+                  <motion.div variants={slideUp} className="mb-3 sm:mb-4">
+                    <ComicInput
+                      label="Their X (Twitter) Username"
+                      icon="𝕏"
+                      placeholder="@crush_handle"
+                      value={crushHandle}
+                      onChange={(e) => setCrushHandle(e.target.value)}
+                      error={errors.crushHandle}
+                      autoComplete="username"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      spellCheck={false}
+                    />
+                  </motion.div>
+
+                  <motion.div variants={slideUp} className="mb-4 sm:mb-6">
+                    <ComicInput
+                      label="Your WhatsApp Number"
+                      icon="📱"
+                      placeholder="+234 XXX XXX XXXX"
+                      value={whatsApp}
+                      onChange={(e) => setWhatsApp(e.target.value)}
+                      error={errors.whatsApp}
+                      inputMode="tel"
+                      autoComplete="tel"
+                      type="tel"
+                    />
+                  </motion.div>
+
+                  {errors.form && (
+                    <p className="text-red-600 text-xs sm:text-sm mb-3 sm:mb-4 font-bold text-center">
+                      ⚠️ {errors.form}
+                    </p>
+                  )}
+
+                  <motion.div variants={slideUp}>
+                    <ComicButton
+                      variant="pink"
+                      type="submit"
+                      className="w-full"
+                      size="lg"
+                    >
+                      💘 SHOOT YOUR SHOT!
+                    </ComicButton>
+                  </motion.div>
+                </motion.div>
+              </form>
             </motion.div>
           )}
 
@@ -306,15 +398,47 @@ export default function HomePage() {
                 </button>
               </div>
 
+              {/* Auto-post confirmation */}
+              {autoPosted && (
+                <motion.div
+                  className="bg-green-50 border-2 border-green-500 p-3 mb-4 text-center rounded-lg"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <p className="text-sm font-bold text-green-700" style={{ fontFamily: "Bangers, cursive" }}>
+                    ✅ AUTO-POSTED TO YOUR X PROFILE!
+                  </p>
+                  <p className="text-xs text-green-600 mt-1" style={{ fontFamily: "Comic Neue, cursive" }}>
+                    Your crush has been tagged. The ball is in their court now 🎾
+                  </p>
+                </motion.div>
+              )}
+
               {/* Share Buttons */}
               <div className="space-y-3">
-                <ComicButton
-                  variant="dark"
-                  onClick={shareOnX}
-                  className="w-full"
-                >
-                  🐦 SHARE ON X (Twitter)
-                </ComicButton>
+                {autoPosted && tweetId ? (
+                  <ComicButton
+                    variant="dark"
+                    onClick={viewTweet}
+                    className="w-full"
+                  >
+                    𝕏 VIEW YOUR TWEET
+                  </ComicButton>
+                ) : (
+                  <ComicButton
+                    variant="dark"
+                    onClick={() => {
+                      const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
+                      const text = encodeURIComponent(
+                        `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
+                      );
+                      window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+                    }}
+                    className="w-full"
+                  >
+                    𝕏 SHARE ON X (Twitter)
+                  </ComicButton>
+                )}
 
                 <ComicButton
                   variant="pink"
@@ -365,9 +489,9 @@ export default function HomePage() {
           animate={{ opacity: 0.6 }}
           transition={{ delay: 1.5 }}
         >
-          Made with 💘 and a little bit of mischief
+          Made with 💘 and a little bit of rizz
         </motion.p>
       </div>
-    </main>
+    </div>
   );
 }

@@ -69,7 +69,7 @@ export function RunawayButton({ onCaught, maxEscapes = 5 }: RunawayButtonProps) 
         <div
             ref={containerRef}
             className="relative w-full"
-            style={{ minHeight: "150px" }}
+            style={{ minHeight: "100px" }}
         >
             <motion.button
                 ref={buttonRef}
