@@ -88,6 +88,7 @@ export default function HomePage() {
 
   const generateMessage = async () => {
     try {
+      audio.play("processing");
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

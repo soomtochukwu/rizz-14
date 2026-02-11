@@ -4,7 +4,8 @@ export type SoundEffect =
   | "success"
   | "error"
   | "whoosh"
-  | "celebrate";
+  | "celebrate"
+  | "processing";
 
 class AudioController {
   private context: AudioContext | null = null;
@@ -32,9 +33,6 @@ class AudioController {
   }
 
   play(effect: SoundEffect) {
-    // Trigger haptic feedback
-    this.vibrate(effect);
-
     if (!this.context || !this.masterGain) {
       // Try to init if not already (for edge cases where listeners didn't fire yet)
       this.init();
@@ -52,9 +50,14 @@ class AudioController {
     osc.connect(gain);
     gain.connect(this.masterGain);
 
+    // Only vibrate for significant events
+    if (["success", "error", "celebrate", "processing"].includes(effect)) {
+      this.vibrate(effect);
+    }
+
     switch (effect) {
       case "click":
-        // Short high-pitch blip
+        // ... (existing click code)
         osc.type = "sine";
         osc.frequency.setValueAtTime(800, t);
         osc.frequency.exponentialRampToValueAtTime(1200, t + 0.05);
@@ -65,7 +68,7 @@ class AudioController {
         break;
 
       case "pop":
-        // Cute bubble pop
+        // ... (existing pop code)
         osc.type = "sine";
         osc.frequency.setValueAtTime(300, t);
         osc.frequency.linearRampToValueAtTime(600, t + 0.1);
@@ -75,15 +78,27 @@ class AudioController {
         osc.stop(t + 0.1);
         break;
 
+      case "processing":
+        // Computer thinking sound (rapid low beeps)
+        osc.type = "square";
+        osc.frequency.setValueAtTime(150, t);
+        osc.frequency.setValueAtTime(200, t + 0.1);
+        osc.frequency.setValueAtTime(150, t + 0.2);
+        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.linearRampToValueAtTime(0.01, t + 0.3);
+        osc.start(t);
+        osc.stop(t + 0.3);
+        break;
+
       case "success":
-        // Major chord arpeggio (C-E-G)
+        // ... (existing success code)
         this.playNote(523.25, t, 0.1, "sine"); // C5
         this.playNote(659.25, t + 0.1, 0.1, "sine"); // E5
         this.playNote(783.99, t + 0.2, 0.3, "sine"); // G5
         break;
 
       case "celebrate":
-        // Fanfare
+        // ... (existing celebrate code)
         this.playNote(523.25, t, 0.1, "triangle"); // C5
         this.playNote(523.25, t + 0.1, 0.1, "triangle"); // C5
         this.playNote(523.25, t + 0.2, 0.1, "triangle"); // C5
@@ -91,7 +106,7 @@ class AudioController {
         break;
 
       case "error":
-        // Low buzz/sawtooth slide down
+        // ... (existing error code)
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(150, t);
         osc.frequency.linearRampToValueAtTime(50, t + 0.3);
@@ -102,7 +117,7 @@ class AudioController {
         break;
 
       case "whoosh":
-        // White noise burst
+        // ... (existing whoosh code)
         const bufferSize = this.context.sampleRate * 0.3; // 0.3s
         const buffer = this.context.createBuffer(
           1,
@@ -139,11 +154,8 @@ class AudioController {
     if (typeof navigator === "undefined" || !navigator.vibrate) return;
 
     switch (effect) {
-      case "click":
-        navigator.vibrate(10); // Light tap
-        break;
-      case "pop":
-        navigator.vibrate(15); // Slightly stronger tap
+      case "processing":
+        navigator.vibrate([30, 30, 30, 30, 30]); // Thin pulse
         break;
       case "success":
         navigator.vibrate([10, 30, 10, 30, 50]); // Short pattern
@@ -154,9 +166,7 @@ class AudioController {
       case "error":
         navigator.vibrate([50, 30, 50, 30]); // Buzz buzz
         break;
-      case "whoosh":
-        navigator.vibrate(20);
-        break;
+      // Removed simple interactions
     }
   }
 
