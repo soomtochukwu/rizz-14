@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { Footer } from "@/components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -43,8 +44,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.variable} antialiased`}>
-        <Providers>{children}</Providers>
+      <body className={`${inter.variable} antialiased min-h-screen flex flex-col overflow-x-hidden`}>
+        <Providers>
+          <main className="flex-grow flex items-center justify-center w-full relative z-10">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
