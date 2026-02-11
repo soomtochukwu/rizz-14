@@ -10,17 +10,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Rizz-14 💘 | The Valentine's Digital Wingman",
+  title: "Rizz-14th 💘 | The Valentine's Digital Wingman",
   description:
     "The cheekiest way to shoot your shot. Generate a link, send it to your crush, and find out if they feel the same way!",
   openGraph: {
-    title: "Rizz-14 💘",
+    title: "Rizz-14th 💘",
     description: "Someone has a crush on you... Will you say YES?",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rizz-14 💘",
+    title: "Rizz-14th 💘",
     description: "Someone has a crush on you... Will you say YES?",
   },
 };

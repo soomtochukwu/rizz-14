@@ -88,7 +88,7 @@ export default function HomePage() {
   const shareOnX = () => {
     const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
     const text = encodeURIComponent(
-      `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
+      `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}\n\n(powered by @rizz_14th)`
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
   };
@@ -126,7 +126,7 @@ export default function HomePage() {
               textShadow: "3px 3px 0 #000",
             }}
           >
-            RIZZ-14
+            RIZZ-14TH
           </h1>
           <p
             className="text-base sm:text-xl"

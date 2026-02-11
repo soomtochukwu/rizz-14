@@ -102,7 +102,7 @@ export default function CrushPage() {
 
     const shareAcceptanceOnX = () => {
         const text = encodeURIComponent(
-            `I just said YES to @${request?.crush_x_handle || "someone"} 💘🎉\n\n👉 ${getLinkUrl()}\n\n#rizz_14 @rizz_14`
+            `I just said YES to @${request?.crush_x_handle || "someone"} 💘🎉\n\n👉 ${getLinkUrl()}\n\n#rizz_14th @rizz_14th`
         );
         window.open(
             `https://twitter.com/intent/tweet?text=${text}`,
