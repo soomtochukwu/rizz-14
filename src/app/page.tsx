@@ -8,6 +8,7 @@ import { ComicProgress } from "@/components/ui/ComicProgress";
 import { FloatingHearts } from "@/components/FloatingHearts";
 import { springIn, slideUp, staggerContainer } from "@/lib/animations";
 import { useAuth } from "@/components/AuthContext";
+import { audio } from "@/lib/audio";
 
 type Step = "auth" | "input" | "generating" | "share";
 
@@ -104,8 +105,10 @@ export default function HomePage() {
       const data = await res.json();
       setAiMessage(data.aiMessage);
       setLinkId(data.linkId);
+      audio.play("success");
       setStep("share");
     } catch (err: any) {
+      audio.play("error");
       setErrors({ form: err.message || "Something went wrong. Try again!" });
       if (step === "generating") setStep("input");
     } finally {
@@ -114,6 +117,7 @@ export default function HomePage() {
   };
 
   const handleRegenerate = async () => {
+    audio.play("click");
     setIsRegenerating(true);
     await generateMessage();
   };
@@ -126,6 +130,7 @@ export default function HomePage() {
   };
 
   const shareOnX = () => {
+    audio.play("pop");
     const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
     const text = encodeURIComponent(
       `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}\n\n(powered by @rizz_14th)`
@@ -134,6 +139,7 @@ export default function HomePage() {
   };
 
   const shareOnWhatsApp = () => {
+    audio.play("pop");
     const text = encodeURIComponent(
       `Someone has a crush on you! 💘 Open this link to find out: ${getShareUrl()}`
     );
@@ -141,6 +147,7 @@ export default function HomePage() {
   };
 
   const copyLink = async () => {
+    audio.play("click");
     await navigator.clipboard.writeText(getShareUrl());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -225,8 +232,6 @@ export default function HomePage() {
               </p> */}
               <ComicButton
                 variant="dark"
-                onClick={login}
-                className="w-full"
                 size="lg"
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5 inline-block mr-1 fill-current" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg> SIGN IN WITH X
@@ -265,7 +270,7 @@ export default function HomePage() {
                   </div>
                   <button
                     type="button"
-                    onClick={logout}
+                    onClick={() => { audio.play("click"); logout(); }}
                     className="text-[10px] text-gray-400 hover:text-gray-600 underline"
                   >
                     Sign out
@@ -336,6 +341,7 @@ export default function HomePage() {
                   <motion.div variants={slideUp}>
                     <ComicButton
                       variant="pink"
+                      onClick={() => audio.play("click")}
                       type="submit"
                       className="w-full"
                       size="lg"
@@ -382,7 +388,7 @@ export default function HomePage() {
               </p>
               <div className="mt-6">
                 <button
-                  onClick={() => setStep("input")}
+                  onClick={() => { audio.play("click"); setStep("input"); }}
                   className="text-sm underline text-gray-500 hover:text-gray-800"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -481,7 +487,7 @@ export default function HomePage() {
 
               <div className="mt-6 text-center">
                 <button
-                  onClick={() => setStep("input")}
+                  onClick={() => { audio.play("click"); setStep("input"); }}
                   className="text-sm underline text-gray-500 hover:text-gray-800"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >

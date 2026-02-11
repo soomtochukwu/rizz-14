@@ -10,6 +10,7 @@ import { CelebrationOverlay } from "@/components/CelebrationOverlay";
 import { FloatingHearts } from "@/components/FloatingHearts";
 import { springIn, slideUp, heartbeat } from "@/lib/animations";
 import type { CrushRequest } from "@/lib/supabase";
+import { audio } from "@/lib/audio";
 
 type ViewState = "loading" | "reveal" | "accepted" | "rejected" | "error";
 
@@ -56,6 +57,7 @@ export default function CrushPage() {
     }, [linkId]);
 
     const handleYes = async () => {
+        audio.play("celebrate");
         setShowCelebration(true);
         setJustAccepted(true);
         setState("accepted");
@@ -91,6 +93,7 @@ export default function CrushPage() {
     };
 
     const handleNoCaught = useCallback(() => {
+        audio.play("whoosh");
         setShowPaywall(true);
     }, []);
 
@@ -101,6 +104,7 @@ export default function CrushPage() {
     };
 
     const shareAcceptanceOnX = () => {
+        audio.play("click");
         const text = encodeURIComponent(
             `I just said YES to @${request?.crush_x_handle || "someone"} 💘🎉\n\n👉 ${getLinkUrl()}\n\n#rizz_14th @rizz_14th`
         );
@@ -111,6 +115,7 @@ export default function CrushPage() {
     };
 
     const openWhatsApp = () => {
+        audio.play("click");
         if (!request?.sender_whatsapp) return;
         const phone = request.sender_whatsapp.replace(/[^0-9]/g, "");
         const msg = encodeURIComponent(
@@ -368,7 +373,7 @@ export default function CrushPage() {
 
                             <ComicButton
                                 variant="pink"
-                                onClick={() => (window.location.href = "/")}
+                                onClick={() => { audio.play("click"); window.location.href = "/"; }}
                                 className="w-full"
                             >
                                 � SHOOT YOUR OWN SHOT
@@ -433,9 +438,10 @@ export default function CrushPage() {
                             </p>
                             <ComicButton
                                 variant="pink"
-                                onClick={() =>
-                                    (window.location.href = "/")
-                                }
+                                onClick={() => {
+                                    audio.play("click");
+                                    window.location.href = "/";
+                                }}
                                 className="mt-4"
                             >
                                 CREATE YOUR OWN 💘
