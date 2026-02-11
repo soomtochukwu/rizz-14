@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ComicButton } from "@/components/ui/ComicButton";
 import { ComicInput } from "@/components/ui/ComicInput";
@@ -22,10 +22,50 @@ export default function HomePage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
 
+  const STORAGE_KEY = "rizz14_state";
+
   // Automatically move to input step when authenticated
-  if (isAuthenticated && step === "auth") {
-    setStep("input");
+  // Modified to respect restored state if it exists
+  if (isAuthenticated && step === "auth" && !isLoading) {
+    // Only auto-advance if we don't have a stored step that is further ahead
+    const saved = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    if (!saved) {
+      setStep("input");
+    }
   }
+
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.crushHandle) setCrushHandle(parsed.crushHandle);
+        if (parsed.whatsApp) setWhatsApp(parsed.whatsApp);
+        if (parsed.aiMessage) setAiMessage(parsed.aiMessage);
+        if (parsed.linkId) setLinkId(parsed.linkId);
+        // Restore step last to ensure data is ready
+        if (parsed.step && parsed.step !== "auth") {
+          setStep(parsed.step);
+        }
+      } catch (e) {
+        console.error("Failed to load state", e);
+      }
+    }
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    if (step === "auth") return; // Don't save empty auth state
+    const state = {
+      step,
+      crushHandle,
+      whatsApp,
+      aiMessage,
+      linkId
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }, [step, crushHandle, whatsApp, aiMessage, linkId]);
 
   const stepIndex = step === "auth" ? 0 : step === "input" ? 0 : step === "generating" ? 1 : 2;
 
