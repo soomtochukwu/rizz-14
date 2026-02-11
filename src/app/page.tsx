@@ -132,7 +132,7 @@ export default function HomePage() {
             className="text-base sm:text-xl"
             style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
           >
-            Your digital wingman 💘 Shoot your shot!
+            Nothing serious, its just for fun! 💘
           </p>
         </motion.div>
 
