@@ -32,6 +32,9 @@ class AudioController {
   }
 
   play(effect: SoundEffect) {
+    // Trigger haptic feedback
+    this.vibrate(effect);
+
     if (!this.context || !this.masterGain) {
       // Try to init if not already (for edge cases where listeners didn't fire yet)
       this.init();
@@ -128,6 +131,31 @@ class AudioController {
         noiseGain.connect(this.masterGain);
         noise.start(t);
         noise.stop(t + 0.3);
+        break;
+    }
+  }
+
+  private vibrate(effect: SoundEffect) {
+    if (typeof navigator === "undefined" || !navigator.vibrate) return;
+
+    switch (effect) {
+      case "click":
+        navigator.vibrate(10); // Light tap
+        break;
+      case "pop":
+        navigator.vibrate(15); // Slightly stronger tap
+        break;
+      case "success":
+        navigator.vibrate([10, 30, 10, 30, 50]); // Short pattern
+        break;
+      case "celebrate":
+        navigator.vibrate([10, 50, 10, 50, 50, 50, 100]); // Long pattern
+        break;
+      case "error":
+        navigator.vibrate([50, 30, 50, 30]); // Buzz buzz
+        break;
+      case "whoosh":
+        navigator.vibrate(20);
         break;
     }
   }
