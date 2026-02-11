@@ -6,6 +6,9 @@ import {
 import { supabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
+const getBaseUrl = () =>
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 /**
  * GET /api/auth/twitter/callback
  * Handles the OAuth callback from Twitter.
@@ -13,6 +16,8 @@ import { cookies } from "next/headers";
  * upserts the user in DB, and sets a session cookie.
  */
 export async function GET(request: NextRequest) {
+  const baseUrl = getBaseUrl();
+
   try {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
@@ -22,15 +27,11 @@ export async function GET(request: NextRequest) {
     // Handle user denying access
     if (error) {
       console.error("Twitter OAuth error:", error);
-      return NextResponse.redirect(
-        new URL("/?auth_error=denied", request.url)
-      );
+      return NextResponse.redirect(`${baseUrl}/?auth_error=denied`);
     }
 
     if (!code || !state) {
-      return NextResponse.redirect(
-        new URL("/?auth_error=missing_params", request.url)
-      );
+      return NextResponse.redirect(`${baseUrl}/?auth_error=missing_params`);
     }
 
     // Retrieve PKCE verifier and state from cookies
@@ -40,20 +41,14 @@ export async function GET(request: NextRequest) {
 
     // Validate state for CSRF protection
     if (!storedState || storedState !== state) {
-      return NextResponse.redirect(
-        new URL("/?auth_error=invalid_state", request.url)
-      );
+      return NextResponse.redirect(`${baseUrl}/?auth_error=invalid_state`);
     }
 
     if (!codeVerifier) {
-      return NextResponse.redirect(
-        new URL("/?auth_error=missing_verifier", request.url)
-      );
+      return NextResponse.redirect(`${baseUrl}/?auth_error=missing_verifier`);
     }
 
     // Exchange code for tokens
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     const redirectUri = `${baseUrl}/api/auth/twitter/callback`;
 
     const tokens = await exchangeCodeForTokens(
@@ -90,13 +85,11 @@ export async function GET(request: NextRequest) {
 
     if (dbError) {
       console.error("DB upsert error:", dbError);
-      return NextResponse.redirect(
-        new URL("/?auth_error=db_error", request.url)
-      );
+      return NextResponse.redirect(`${baseUrl}/?auth_error=db_error`);
     }
 
-    // Set session cookie with user ID
-    const response = NextResponse.redirect(new URL("/", request.url));
+    // Set session cookie with user ID and redirect to home
+    const response = NextResponse.redirect(baseUrl);
 
     response.cookies.set("rizz_session", user.id, {
       httpOnly: true,
@@ -113,8 +106,6 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (err) {
     console.error("Twitter callback error:", err);
-    return NextResponse.redirect(
-      new URL("/?auth_error=callback_failed", request.url)
-    );
+    return NextResponse.redirect(`${baseUrl}/?auth_error=callback_failed`);
   }
 }

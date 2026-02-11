@@ -21,8 +21,6 @@ export default function HomePage() {
   const [linkId, setLinkId] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
-  const [autoPosted, setAutoPosted] = useState(false);
-  const [tweetId, setTweetId] = useState<string | null>(null);
 
   // Automatically move to input step when authenticated
   if (isAuthenticated && step === "auth") {
@@ -66,8 +64,6 @@ export default function HomePage() {
       const data = await res.json();
       setAiMessage(data.aiMessage);
       setLinkId(data.linkId);
-      setAutoPosted(!!data.autoPosted);
-      setTweetId(data.tweetId || null);
       setStep("share");
     } catch (err: any) {
       setErrors({ form: err.message || "Something went wrong. Try again!" });
@@ -89,10 +85,12 @@ export default function HomePage() {
     return `/${linkId}`;
   };
 
-  const viewTweet = () => {
-    if (tweetId) {
-      window.open(`https://twitter.com/i/web/status/${tweetId}`, "_blank");
-    }
+  const shareOnX = () => {
+    const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
+    const text = encodeURIComponent(
+      `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
   };
 
   const shareOnWhatsApp = () => {
@@ -267,6 +265,7 @@ export default function HomePage() {
                       autoCapitalize="none"
                       autoCorrect="off"
                       spellCheck={false}
+                      type="text"
                     />
                   </motion.div>
 
@@ -276,7 +275,11 @@ export default function HomePage() {
                       icon="📱"
                       placeholder="+234 XXX XXX XXXX"
                       value={whatsApp}
-                      onChange={(e) => setWhatsApp(e.target.value)}
+                      onChange={(e) => {
+                        const filtered = e.target.value.replace(/[^\d+\s\-()]/g, "");
+                        setWhatsApp(filtered);
+                      }}
+                      pattern="[\d\s+\-()]*"
                       error={errors.whatsApp}
                       inputMode="tel"
                       autoComplete="tel"
@@ -398,47 +401,15 @@ export default function HomePage() {
                 </button>
               </div>
 
-              {/* Auto-post confirmation */}
-              {autoPosted && (
-                <motion.div
-                  className="bg-green-50 border-2 border-green-500 p-3 mb-4 text-center rounded-lg"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <p className="text-sm font-bold text-green-700" style={{ fontFamily: "Bangers, cursive" }}>
-                    ✅ AUTO-POSTED TO YOUR X PROFILE!
-                  </p>
-                  <p className="text-xs text-green-600 mt-1" style={{ fontFamily: "Comic Neue, cursive" }}>
-                    Your crush has been tagged. The ball is in their court now 🎾
-                  </p>
-                </motion.div>
-              )}
-
               {/* Share Buttons */}
               <div className="space-y-3">
-                {autoPosted && tweetId ? (
-                  <ComicButton
-                    variant="dark"
-                    onClick={viewTweet}
-                    className="w-full"
-                  >
-                    𝕏 VIEW YOUR TWEET
-                  </ComicButton>
-                ) : (
-                  <ComicButton
-                    variant="dark"
-                    onClick={() => {
-                      const handle = crushHandle.startsWith("@") ? crushHandle : `@${crushHandle}`;
-                      const text = encodeURIComponent(
-                        `${handle} ${aiMessage}\n\n💘 Will you say yes? 👉 ${getShareUrl()}`
-                      );
-                      window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
-                    }}
-                    className="w-full"
-                  >
-                    𝕏 SHARE ON X (Twitter)
-                  </ComicButton>
-                )}
+                <ComicButton
+                  variant="dark"
+                  onClick={shareOnX}
+                  className="w-full"
+                >
+                  𝕏 SHARE ON X (Twitter)
+                </ComicButton>
 
                 <ComicButton
                   variant="pink"
