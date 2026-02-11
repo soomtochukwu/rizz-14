@@ -114,7 +114,7 @@ export async function generateCrushMessage(
 
       *** OUTPUT ***
       Generate ONLY the message text. No explanations.
-      LENGTH: Strictly under 306 characters.
+      LENGTH: STRICTLY under 280 characters. Keep it punchy and concise.
       `;
     } else {
       // 🚨 FALLBACK MODE: We only have the handle.
@@ -130,7 +130,7 @@ export async function generateCrushMessage(
       RULES:
       - TONE: Cocky, funny, smooth.
       - FORMAT: First person ("I").
-      - LENGTH: Under 306 characters.
+      - LENGTH: Under 280 characters. Keep it short.
       - EMOJIS: MUST use 2-3 flirty/relevant emojis (e.g. 💘, 😏, 🔥, ✨).
       - CALL TO ACTION: Unique "Be my Val?" plea.
       - NO hashtags.
