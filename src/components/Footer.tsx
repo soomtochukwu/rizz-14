@@ -29,7 +29,7 @@ export function Footer() {
                     <span>📂 GitHub</span>
                 </Link>
             </div>
-            <p className="text-[10px] font-mono text-black/40 hidden md:block">
+            <p className="text-[10px] font-mono text-black/40 hidden md:block pointer-events-auto">
                 Built with vibes and insha'Allah
             </p>
         </footer>
