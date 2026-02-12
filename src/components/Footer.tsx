@@ -12,6 +12,15 @@ export function Footer() {
                     <span>🤔 What is this?</span>
                 </Link>
                 <Link
+                    href="https://twitter.com/intent/follow?screen_name=rizz_14th"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs md:text-sm font-bold uppercase tracking-wider text-gray-400 hover:text-gray-700 md:text-black md:bg-white md:border-2 md:border-black md:px-3 md:py-1.5 md:hover:translate-x-1 md:hover:translate-y-1 md:hover:shadow-none md:transition-all md:shadow-[3px_3px_0px_#000]"
+                    style={{ fontFamily: "Bangers, cursive" }}
+                >
+                    <span>𝕏</span>
+                </Link>
+                <Link
                     href="https://github.com/soomtochukwu/rizz-14"
                     target="_blank"
                     rel="noopener noreferrer"
