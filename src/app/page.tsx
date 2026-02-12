@@ -161,7 +161,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-3 sm:p-4 relative w-full">
+    <div className="flex flex-col items-center justify-center p-3 sm:p-4 relative w-full min-h-full">
       <FloatingHearts />
 
       <div className="w-full max-w-lg z-10">

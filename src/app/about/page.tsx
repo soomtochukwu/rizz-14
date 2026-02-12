@@ -5,10 +5,11 @@ import { ComicButton } from "@/components/ui/ComicButton";
 import { FloatingHearts } from "@/components/FloatingHearts";
 import { springIn, slideUp, staggerContainer } from "@/lib/animations";
 import { audio } from "@/lib/audio";
+import Link from "next/link";
 
 export default function AboutPage() {
     return (
-        <div className="flex flex-col items-center justify-center p-4 sm:p-6 relative w-full min-h-full">
+        <div className="flex flex-col items-center justify-start pt-12 md:pt-20 px-4 sm:p-6 pb-24 relative w-full min-h-full">
             <FloatingHearts />
 
             <div className="w-full max-w-2xl z-10">
@@ -20,7 +21,7 @@ export default function AboutPage() {
                     animate="visible"
                 >
                     <h1
-                        className="text-4xl sm:text-6xl mb-2 text-stroke"
+                        className="text-3xl sm:text-6xl mb-2 text-stroke"
                         style={{
                             fontFamily: "Bangers, cursive",
                             color: "var(--hot-pink)",
@@ -35,12 +36,12 @@ export default function AboutPage() {
                     variants={staggerContainer}
                     initial="hidden"
                     animate="visible"
-                    className="space-y-6"
+                    className="space-y-8"
                 >
                     {/* Origin Story */}
                     <motion.div
                         variants={slideUp}
-                        className="comic-panel p-6 sm:p-8 relative overflow-hidden"
+                        className="comic-panel p-5 sm:p-8 relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none text-9xl">
                             💔
@@ -52,21 +53,27 @@ export default function AboutPage() {
                             THE ORIGIN STORY
                         </h2>
                         <p
-                            className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4"
+                            className="text-base sm:text-lg text-purple-900 leading-relaxed mb-4"
                             style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
                         >
-                            I saw a nerd get rejected.
+                            It started with a tragedy. I watched a homie fumble a 10/10 so bad it set the human race back 50 years.
                         </p>
                         <p
-                            className="text-base sm:text-lg text-gray-700 leading-relaxed"
+                            className="text-base sm:text-lg text-pink-600 leading-relaxed"
                             style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
                         >
-                            So I decided to build the perfect rizz app for them. It's not just an app; it's a digital wingman that screams "I LIKE YOU" so you don't have to stutter (just kidding, it's vibes), and a whole lot of neon to make sure they can't ignore you.
+                            So I built Rizz-14th. Not just an app, but a tactical nuke for your love life. No stuttering, just vibes.
+                        </p>
+                        <p
+                            className="text-base sm:text-lg text-red-600 leading-relaxed mt-4"
+                            style={{ fontFamily: "Comic Neue, cursive", fontWeight: 700 }}
+                        >
+                            Why "14th"? Because February 14th is the final boss of loneliness. And we're giving you the cheat codes.
                         </p>
                     </motion.div>
 
                     {/* How to Use */}
-                    <motion.div variants={slideUp} className="comic-panel p-6 sm:p-8 bg-yellow-100">
+                    <motion.div variants={slideUp} className="comic-panel p-5 sm:p-8 bg-yellow-100">
                         <h2
                             className="text-2xl mb-6 text-center"
                             style={{ fontFamily: "Bangers, cursive" }}
@@ -74,7 +81,7 @@ export default function AboutPage() {
                             HOW TO RIZZ (IN 3 STEPS)
                         </h2>
 
-                        <div className="grid gap-6 sm:grid-cols-3 text-center">
+                        <div className="grid gap-6 grid-cols-1 sm:grid-cols-3 text-center">
                             {/* Step 1 */}
                             <div className="bg-white p-4 border-2 border-black shadow-[4px_4px_0_#000] rounded-lg transform -rotate-2">
                                 <div className="text-4xl mb-2">🔐</div>
@@ -117,11 +124,13 @@ export default function AboutPage() {
                             size="lg"
                             onClick={() => {
                                 audio.play("click");
-                                window.location.href = "/";
+                                // window.location.href = "/";
                             }}
                             className="w-full sm:w-auto"
                         >
-                            👈 GO BACK HOME & START
+                            <Link href={"/"}>
+                                👈 GO BACK HOME & START
+                            </Link>
                         </ComicButton>
                     </motion.div>
 

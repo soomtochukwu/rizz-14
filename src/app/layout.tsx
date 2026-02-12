@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "The cheekiest way to shoot your shot. Generate a link, send it to your crush, and find out if they feel the same way!",
   openGraph: {
     title: "Rizz-14th 💘",
-    description: "Someone has a crush on you... Will you say YES?",
+    description: "...the perfect rizz 💕 app for nerds 🧑🏿‍💻",
     type: "website",
   },
   twitter: {
@@ -46,7 +46,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased h-screen flex flex-col overflow-hidden`}>
         <Providers>
-          <main className="grow flex items-center justify-center w-full relative z-10 overflow-y-auto">
+          <main className="grow flex flex-col w-full relative z-10 overflow-y-auto">
             {children}
           </main>
           <Footer />

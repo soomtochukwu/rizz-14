@@ -126,7 +126,7 @@ export default function CrushPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center p-4 sm:p-6 relative w-full">
+        <div className="flex flex-col items-center justify-center p-4 sm:p-6 relative w-full min-h-full">
             <FloatingHearts />
             <CelebrationOverlay show={showCelebration} />
 
