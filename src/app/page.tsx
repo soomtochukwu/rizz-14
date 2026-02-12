@@ -154,6 +154,12 @@ export default function HomePage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleLogout = async () => {
+    audio.play("click");
+    localStorage.removeItem(STORAGE_KEY);
+    await logout();
+  };
+
   return (
     <div className="flex flex-col items-center justify-center p-3 sm:p-4 relative w-full">
       <FloatingHearts />
@@ -271,7 +277,7 @@ export default function HomePage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => { audio.play("click"); logout(); }}
+                    onClick={handleLogout}
                     className="text-[10px] text-gray-400 hover:text-gray-600 underline"
                   >
                     Sign out
