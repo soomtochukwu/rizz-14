@@ -303,6 +303,10 @@ body {
 }
 
 /* ---- Responsive Helpers ---- */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+
 @media (max-width: 640px) {
   .comic-btn {
     padding: 10px 16px;
