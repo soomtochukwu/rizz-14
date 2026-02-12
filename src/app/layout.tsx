@@ -44,7 +44,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.variable} antialiased h-[100dvh] flex flex-col overflow-hidden`}>
+      <body className={`${inter.variable} antialiased h-dvh flex flex-col overflow-hidden`}>
         <Providers>
           <main className="grow flex flex-col w-full relative z-10 overflow-y-auto">
             {children}
